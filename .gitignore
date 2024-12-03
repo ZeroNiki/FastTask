@@ -1,1 +1,59 @@
+# Python Bytecode
+__pycache__/
+*.py[cod]
+*$py.class
+
+# sys_file
+.DS_Store
+Thumbs.db
+
+# venv 
+venv/
+env/
+.venv/
+.env/
 .venv
+
+# VS code  
+.vscode/
+.idea/
+
+# other file 
+*.log
+*.pot
+*.mo
+*.coverage
+*.tox/
+.nox/
+.coverage.*
+.cache/
+nosetests.xml
+coverage.xml
+*.hypothesis/
+
+# Libs 
+Pipfile.lock
+poetry.lock
+*.egg-info/
+dist/
+build/
+
+# configuration 
+*.env 
+*.env.*   
+
+# Tests 
+tests/__pycache__/
+tests/*.pyc
+*.pyo
+
+# Pytest
+.pytest_cache/
+
+# FastAPI
+static/
+media/
+
+# logs 
+logs/
+*.log
