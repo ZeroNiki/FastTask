@@ -58,3 +58,6 @@ media/
 # logs 
 logs/
 *.log
+
+# db
+*.db
