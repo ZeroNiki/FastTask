@@ -38,9 +38,10 @@ poetry.lock
 dist/
 build/
 
-# configuration 
-*.env 
-*.env.*   
+# configuration
+.dev_env
+*.env
+*.env.*
 
 # Tests 
 tests/__pycache__/
@@ -57,3 +58,6 @@ media/
 # logs 
 logs/
 *.log
+
+# db
+*.db
