@@ -1,38 +1,33 @@
 import logging
 import httpx
+
 from aiogram import Router, html
 from aiogram.filters import CommandStart, Command
 from aiogram.types import Message
 
 from src.bot.config import FASTAPI_URL
 
-from src.bot.db.task_manager import TasksDB
+from src.db import crud
+from src.db.database import init_db, SessionLocal
 
 
 router = Router()
 
-db = TasksDB()
-
+init_db()
 
 @router.message(CommandStart())
 async def command_start(message: Message):
+    user_id = message.from_user.id
     fullname = message.from_user.full_name
-    tg_id = message.from_user.id
     username = message.from_user.username
 
-    db.add_user(tg_id, username)
-
-    await message.answer(f"Привет {html.bold(fullname)}! Я менеджер задач\nЧем могу помочь?")
-
-
-@router.message(Command("get_root"))
-async def get_root(message: Message):
+    db = SessionLocal()
     try:
-        async with httpx.AsyncClient() as client:
-            response = await client.get(FASTAPI_URL)
-            data = response.json()["Message"]
-
-            await message.reply(f"{data}")
+        crud.create_user(db, user_id, username)
+        await message.answer(f"Привет {html.bold(fullname)}! Я менеджер задач\nЧем могу помочь?")
+        logging.info(f"User {username} with id {user_id} created successfully.")
     except Exception as e:
-        logging.error(f"Error while fetching data from FastAPI: {e}")
-        await message.reply("Извините, произошла ошибка при получении данных из FastAPI.")
+        logging.error(f"Error while creating user: {e}")
+        await message.reply("Извините, произошла ошибка при создании пользователя.")
+    finally:
+        db.close()
