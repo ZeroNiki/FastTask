@@ -33,3 +33,22 @@ def mark_task_done(db: Session, task_id: int):
         return db_task
 
     return None
+
+
+def delete_task(db: Session, task_id: int):
+    db_task = db.query(Task).filter(Task.id == task_id).first()
+
+    if not db_task:
+        raise ValueError(f"Task with id {task_id} not found.")
+
+    db.delete(db_task)
+    db.commit()
+
+
+def find_user_task(db: Session, task_id: int):
+    db_task = db.query(Task).filter(Task.id == task_id).first()
+
+    if not db_task:
+        raise ValueError(f"Task with id {task_id} not found")
+
+    return db_task
