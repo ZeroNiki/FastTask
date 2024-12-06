@@ -18,21 +18,14 @@ router = APIRouter(
 
 
 @router.post("/users")
-async def create_user(user: UserCreate, db: Session = Depends(get_db)):
-    db_user = db.query(User).filter(User.id == user.user_id).first()
-
-    if db_user:
-        raise HTTPException(status_code=400, detail="User already exists")
-
-    new_user = User(id=user.user_id, username=user.username)
-    db.add(new_user)
-    db.commit()
-    db.refresh(new_user)
-
-    return {
-            "Message": "User create successfully", 
-            "user": new_user
-            }
+async def create_user_api(user: UserCreate, db: Session = Depends(get_db)):
+    try:
+        new_user = crud.create_user(db, user.user_id, user.username)
+        return {"Message": "User create successfully",
+                "user": {"id": new_user.id, "username": new_user.username}
+                }
+    except Exception as e:
+        raise HTTPException(status_code=400, detail=str(e))
 
 
 @router.post("/tasks")
@@ -69,21 +62,23 @@ async def mark_task_done(task_id: int, db: Session = Depends(get_db)):
 
 @router.delete("/tasks/{task_id}")
 async def delete_task(task_id: int, db: Session = Depends(get_db)):
-    db_task = db.query(Task).filter(Task.id == task_id).first()
-
-    if db_task is None:
-        raise HTTPException(status_code=404, detail="Task not found")
-
-    db.delete(db_task)
-    db.commit()
-    return {"Message": "Task delete successfully"}
+    try:
+        crud.delete_task(db, task_id)
+        return {"Message": "Task delete successfully"}
+    except ValueError as v:
+        raise HTTPException(status_code=400, detail=f"Task not found: {v}")
 
 
-@router.get("/tasks")
-async def get_all_tasks(db: Session = Depends(get_db)):
-    tasks = db.query(Task).all()
-    return [{ "id": task.id, 
-              "task_name": task.task_name, 
-              "description": task.description, 
-              "date": task.date, 
-              "is_done": task.is_done } for task in tasks]
+@router.get("/find_task/{task_id}")
+async def find_task(task_id: int, db: Session = Depends(get_db)):
+    try:
+        task = crud.find_user_task(db, task_id)
+        return {"id": task.id, 
+                  "task_name": task.task_name, 
+                  "description": task.description, 
+                  "date": task.date, 
+                  "is_done": task.is_done }
+
+    except ValueError as v:
+        raise HTTPException(status_code=400, detail=f"Something wrong: {v}")
+
