@@ -6,8 +6,8 @@ from aiogram.utils.keyboard import InlineKeyboardBuilder
 
 main = ReplyKeyboardMarkup(
     keyboard=[[KeyboardButton(text="Создать задачу")],
-              [KeyboardButton(text="Получить задачу пользователя")],
-              [KeyboardButton(text="Получить все задачи")]], resize_keyboard=True)
+              [KeyboardButton(text="Показать задачи")],
+              [KeyboardButton(text="Поиск задачи")]], resize_keyboard=True)
 
 
 builder = InlineKeyboardBuilder()
