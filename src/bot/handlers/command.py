@@ -25,7 +25,7 @@ async def command_start(message: Message):
     try:
         async with httpx.AsyncClient() as client:
             response = await client.post(
-                    f"{FASTAPI_URL}operations/users/",
+                    f"{FASTAPI_URL}operations/users",
                     json = {"user_id": user_id, "username": username}
             ) 
 
