@@ -34,19 +34,11 @@ async def process_task_name(message: Message, state: FSMContext):
 async def process_task_description(message: Message, state: FSMContext):
     await state.update_data(description=message.text)
     logging.info(f"(description): {message.text}")
-    await state.set_state(CreateTaskState.date)
-    await message.answer("Напиши дату к задачи")
-
-
-@router.message(CreateTaskState.date)
-async def process_task_date(message: Message, state: FSMContext):
-    await state.update_data(date=message.text)
-    logging.info(f"(date): {message.text}")
+    logging.info("Task create successful")
 
     data = await state.get_data()
     task_name = data.get("task_name")
     description = data.get("description", None)
-    date = data.get("date", None)
 
     await show_task_summary(message, state)
     await state.clear()

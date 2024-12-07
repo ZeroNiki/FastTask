@@ -63,7 +63,7 @@ async def get_user_task(message: Message):
                             f"🔹 {html.bold('ID')}: {task['id']}\n"
                             f"{html.bold('Название')}: {html.bold(task['task_name'])}\n"
                             f"{html.bold('Описание')}: {task['description']}\n"
-                            f"{html.bold('Дата')}: {task['date']}\n"
+                            f"{html.bold('Дата создания')}: {task['date']}\n"
                             f"{html.bold('Статус')}: {'Выполнено ✅' if task['is_done'] else 'Не выполнено ❌'}"
                             for task in data
                         ]
