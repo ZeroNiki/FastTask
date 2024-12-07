@@ -1,4 +1,14 @@
 # FastTask
+
+- Navigation:
+    - [About](https://github.com/ZeroNiki/FastTask/blob/main/README.md#about) 
+        - [Features](https://github.com/ZeroNiki/FastTask/blob/main/README.md#features)
+            - [Components](https://github.com/ZeroNiki/FastTask/blob/main/README.md#components)
+    - [Install and usage](https://github.com/ZeroNiki/FastTask/blob/main/README.md#install-and-usage)
+
+
+<b>[RU README](https://github.com/ZeroNiki/FastTask/blob/main/README_RUS.md)</b>
+
 ## About
 This project is a Task Management Bot using the Aiogram framework for Telegram bot interaction and FastAPI for backend operations. It integrates a SQLite database via SQLAlchemy ORM to manage users and tasks. The bot allows users to create, view, update, and delete tasks with seamless interaction and error handling.
 
