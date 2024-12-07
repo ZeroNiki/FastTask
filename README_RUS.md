@@ -42,6 +42,14 @@ pip install -r requirements.txt
 TOKEN=ваш токен бота
 ```
 
+Также выполни эти комманда:
+```sh
+mkdir migrations/versions
+
+alembic revision --autogenerate -m "Init"
+alembic upgrade head
+```
+
 Запустите `api` и `бот`:
 ```sh
 python3 start_api.py 

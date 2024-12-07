@@ -52,6 +52,14 @@ in `.env` file paste you telegram bot `TOKEN`:
 TOKEN=you bot token
 ```
 
+Update database:
+```sh
+mkdir migrations/versions
+
+alembic revision --autogenerate -m "Init"
+alembic upgrade head
+```
+
 Start `api` and `bot`:
 ```sh
 python3 start_api.py 
