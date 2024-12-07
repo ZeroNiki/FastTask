@@ -12,9 +12,9 @@ main = ReplyKeyboardMarkup(
 
 builder = InlineKeyboardBuilder()
 
-chBtn = InlineKeyboardMarkup(inline_keyboard=[
+choice = InlineKeyboardMarkup(inline_keyboard=[
     [InlineKeyboardButton(text="Отметить задачу выполненной", callback_data="markTaskDone")],
     [InlineKeyboardButton(text="Удалить задачу", callback_data="deleteTask")],
 ])
 
-builder.attach(InlineKeyboardBuilder.from_markup(chBtn))
+builder.attach(InlineKeyboardBuilder.from_markup(choice))
