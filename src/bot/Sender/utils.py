@@ -7,6 +7,8 @@ from aiogram.enums import ParseMode
 
 from src.bot.config import FASTAPI_URL
 
+from src.bot.handlers import keyboard as kb
+
 
 async def show_task_summary(message: Message, state: FSMContext) -> None:
     task_data = await state.get_data()
@@ -31,7 +33,7 @@ async def show_task_summary(message: Message, state: FSMContext) -> None:
                 data = response.json()
                 task_msg = "\n\n".join([f"{html.bold('Название')}: {html.bold(data['task_name'])}\n"
                             f"{html.bold('Описание')}: {data['description']}\n"
-                            f"{html.bold('Дата')}: {data['date']}\n"
+                            f"{html.bold('Дата создания')}: {data['date']}\n"
                             f"{html.bold('Статус')}: {'Выполнено ✅' if data['is_done'] else 'Не выполнено ❌'}"])
 
                 await message.answer(f"{task_msg}")
@@ -43,7 +45,6 @@ async def show_task_summary(message: Message, state: FSMContext) -> None:
 
 
 
-# TEST: Test this
 async def show_find_result(message: Message, state: FSMContext) -> None:
     data = await state.get_data()
     task_id = data.get('task_id') 
@@ -54,13 +55,13 @@ async def show_find_result(message: Message, state: FSMContext) -> None:
             data = response.json()
 
             if response.status_code == 200:
-                task_msg = [f"🔹 {html.bold('ID')}: {data['id']}\n"
+                task_msg = "\n\n".join([f"🔹 {html.bold('ID')}: {data['id']}\n"
                             f"{html.bold('Название')}: {html.bold(data['task_name'])}\n"
                             f"{html.bold('Описание')}: {data['description']}\n"
-                            f"{html.bold('Дата')}: {data['date']}\n"
-                            f"{html.bold('Статус')}: {'Выполнено ✅' if data['is_done'] else 'Не выполнено ❌'}"]
+                            f"{html.bold('Дата создания')}: {data['date']}\n"
+                            f"{html.bold('Статус')}: {'Выполнено ✅' if data['is_done'] else 'Не выполнено ❌'}"])
 
-                await message.answer(f"{task_msg}")
+                await message.answer(f"{task_msg}", reply_markup=kb.choice)
 
 
     except Exception as e:

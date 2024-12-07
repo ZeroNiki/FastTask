@@ -2,7 +2,6 @@ from typing import Optional
 from sqlalchemy.orm import Session
 
 from src.db.models import User, Task
-from src.db.schemas import TaskCreate
 
 def create_user(db: Session, user_id: int, username: str):
     db_user = User(id=user_id, username=username)
