@@ -3,6 +3,7 @@ from sqlalchemy.orm import Session
 
 from src.db.models import User, Task
 
+
 def create_user(db: Session, user_id: int, username: str):
     db_user = User(id=user_id, username=username)
     db.add(db_user)
@@ -11,8 +12,16 @@ def create_user(db: Session, user_id: int, username: str):
     return db_user
 
 
-def create_task(db: Session, user_id: int, task_name: str, description: Optional[str] = None, date: Optional[str] = None):
-    db_task = Task(user_id=user_id, task_name=task_name, description=description, date=date)
+def create_task(
+    db: Session,
+    user_id: int,
+    task_name: str,
+    description: Optional[str] = None,
+    date: Optional[str] = None,
+):
+    db_task = Task(
+        user_id=user_id, task_name=task_name, description=description, date=date
+    )
     db.add(db_task)
     db.commit()
     db.refresh(db_task)
