@@ -5,11 +5,10 @@ from aiogram import Router, F
 from aiogram.types import Message, CallbackQuery
 from aiogram.fsm.context import FSMContext
 
-from src.bot.Sender.broadcast import CreateTaskState, FindTaskState 
+from src.bot.Sender.broadcast import CreateTaskState, FindTaskState
 from src.bot.Sender.utils import show_find_result, show_task_summary
 
 from src.bot.config import FASTAPI_URL
-
 
 
 router = Router()
@@ -63,7 +62,7 @@ async def find_task(message: Message, state: FSMContext):
 @router.callback_query(FindTaskState.confirmation, F.data == "markTaskDone")
 async def mark_task(query: CallbackQuery, state: FSMContext):
     data = await state.get_data()
-    task_id = data.get('task_id')
+    task_id = data.get("task_id")
 
     try:
         async with httpx.AsyncClient() as client:
@@ -83,7 +82,7 @@ async def mark_task(query: CallbackQuery, state: FSMContext):
 @router.callback_query(FindTaskState.confirmation, F.data == "deleteTask")
 async def delete_task(query: CallbackQuery, state: FSMContext):
     data = await state.get_data()
-    task_id = data.get('task_id')
+    task_id = data.get("task_id")
 
     try:
         async with httpx.AsyncClient() as client:

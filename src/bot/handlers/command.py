@@ -16,6 +16,7 @@ router = Router()
 
 init_db()
 
+
 @router.message(CommandStart())
 async def command_start(message: Message):
     user_id = message.from_user.id
@@ -25,9 +26,9 @@ async def command_start(message: Message):
     try:
         async with httpx.AsyncClient() as client:
             response = await client.post(
-                    f"{FASTAPI_URL}operations/users",
-                    json = {"user_id": user_id, "username": username}
-            ) 
+                f"{FASTAPI_URL}operations/users",
+                json={"user_id": user_id, "username": username},
+            )
 
             if response.status_code == 200:
                 data = response.json()
@@ -35,14 +36,22 @@ async def command_start(message: Message):
             elif response.status_code == 400:
                 logging.warning(f"User already exist: {user_id} {username}")
             else:
-                logging.error(f"Unexpected response: {response.status_code} {response.json()}")
+                logging.error(
+                    f"Unexpected response: {response.status_code} {response.json()}"
+                )
 
     except Exception as e:
         logging.error(f"Error while creating user: {e}")
-        await message.reply("Извините, произошла ошибка при создании пользователя. (Пользователь уже существует)", reply_markup=kb.main)
+        await message.reply(
+            "Извините, произошла ошибка при создании пользователя. (Пользователь уже существует)",
+            reply_markup=kb.main,
+        )
         return
 
-    await message.answer(f"Привет, {html.bold(fullname)}! Я менеджер задач.\nЧем могу помочь?", reply_markup=kb.main)
+    await message.answer(
+        f"Привет, {html.bold(fullname)}! Я менеджер задач.\nЧем могу помочь?",
+        reply_markup=kb.main,
+    )
 
 
 @router.message(F.text == "Показать задачи")
@@ -67,11 +76,13 @@ async def get_user_task(message: Message):
                             f"{html.bold('Статус')}: {'Выполнено ✅' if task['is_done'] else 'Не выполнено ❌'}"
                             for task in data
                         ]
-                    ) 
+                    )
 
                     await message.reply(f"Ваши задачи:\n\n{task_list}")
             else:
-                await message.reply("Не удалось получить список задач. Попробуйте позже.")
+                await message.reply(
+                    "Не удалось получить список задач. Попробуйте позже."
+                )
     except Exception as e:
         logging.error(f"Error while fetching tasks: {e}")
         await message.reply("Произошла ошибка при получении задач. Попробуйте позже.")

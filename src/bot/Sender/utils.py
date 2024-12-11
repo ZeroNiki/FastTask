@@ -20,21 +20,24 @@ async def show_task_summary(message: Message, state: FSMContext) -> None:
     try:
         async with httpx.AsyncClient() as client:
             payload = {
-                    "user_id": user_id,
-                    "task_name": task_name,
-                    "description": description,
-                    "date": date 
+                "user_id": user_id,
+                "task_name": task_name,
+                "description": description,
+                "date": date,
             }
             logging.info(f"Sending data to API: {payload}")
             response = await client.post(f"{FASTAPI_URL}operations/tasks", json=payload)
 
-
             if response.status_code == 200:
                 data = response.json()
-                task_msg = "\n\n".join([f"{html.bold('Название')}: {html.bold(data['task_name'])}\n"
-                            f"{html.bold('Описание')}: {data['description']}\n"
-                            f"{html.bold('Дата создания')}: {data['date']}\n"
-                            f"{html.bold('Статус')}: {'Выполнено ✅' if data['is_done'] else 'Не выполнено ❌'}"])
+                task_msg = "\n\n".join(
+                    [
+                        f"{html.bold('Название')}: {html.bold(data['task_name'])}\n"
+                        f"{html.bold('Описание')}: {data['description']}\n"
+                        f"{html.bold('Дата создания')}: {data['date']}\n"
+                        f"{html.bold('Статус')}: {'Выполнено ✅' if data['is_done'] else 'Не выполнено ❌'}"
+                    ]
+                )
 
                 await message.answer(f"{task_msg}")
             else:
@@ -44,10 +47,9 @@ async def show_task_summary(message: Message, state: FSMContext) -> None:
         await message.answer("Произошла ошибка!")
 
 
-
 async def show_find_result(message: Message, state: FSMContext) -> None:
     data = await state.get_data()
-    task_id = data.get('task_id') 
+    task_id = data.get("task_id")
 
     try:
         async with httpx.AsyncClient() as client:
@@ -55,14 +57,17 @@ async def show_find_result(message: Message, state: FSMContext) -> None:
             data = response.json()
 
             if response.status_code == 200:
-                task_msg = "\n\n".join([f"🔹 {html.bold('ID')}: {data['id']}\n"
-                            f"{html.bold('Название')}: {html.bold(data['task_name'])}\n"
-                            f"{html.bold('Описание')}: {data['description']}\n"
-                            f"{html.bold('Дата создания')}: {data['date']}\n"
-                            f"{html.bold('Статус')}: {'Выполнено ✅' if data['is_done'] else 'Не выполнено ❌'}"])
+                task_msg = "\n\n".join(
+                    [
+                        f"🔹 {html.bold('ID')}: {data['id']}\n"
+                        f"{html.bold('Название')}: {html.bold(data['task_name'])}\n"
+                        f"{html.bold('Описание')}: {data['description']}\n"
+                        f"{html.bold('Дата создания')}: {data['date']}\n"
+                        f"{html.bold('Статус')}: {'Выполнено ✅' if data['is_done'] else 'Не выполнено ❌'}"
+                    ]
+                )
 
                 await message.answer(f"{task_msg}", reply_markup=kb.choice)
-
 
     except Exception as e:
         logging.error(f"Something wrong: {e}")
